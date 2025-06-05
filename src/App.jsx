@@ -2,6 +2,9 @@ import { useState } from "react";
 import SearchBar from "../src/components/SearchBar";
 import { MoviesProvider } from "./context/MoviesContext";
 import MoviesList from "../src/components/MoviesList";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import * as bootstrap from 'bootstrap';
+
 
 function App() {
   const [movies, setMovies] = useState([]);
