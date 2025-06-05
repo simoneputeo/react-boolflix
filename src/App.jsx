@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import SearchBar from "../src/components/SearchBar";
+import { MoviesProvider } from "./context/MoviesContext";
+import MoviesList from "../src/components/MoviesList";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [movies, setMovies] = useState([]);
+
+  async function fetchMovies(query) {
+    if (!query) return;
+
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const URL = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`;
+
+    try {
+      const response = await fetch(URL);
+      const data = await response.json();
+      setMovies(data.results);
+    } catch (error) {
+      console.error("Errore nella ricerca dei film:", error);
+    }
+  }
 
   return (
-    <>
+    <MoviesProvider>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <SearchBar onSearch={fetchMovies} />
+        <div className="container mt-4">
+          {movies.map((movie) => (
+            <div key={movie.id} className="card mb-3">
+              <div className="card-body">
+                <h5 className="card-title">{movie.title}</h5>
+                <h6 className="card-subtitle text-muted">{movie.original_title}</h6>
+                <p>Lingua: {movie.original_language}</p>
+                <p>Voto: {movie.vote_average}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <MoviesList />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </MoviesProvider>
+
+  );
 }
 
-export default App
+export default App;
