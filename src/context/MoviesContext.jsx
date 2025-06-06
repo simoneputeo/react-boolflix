@@ -8,8 +8,9 @@ export function MoviesProvider({ children }) {
     async function fetchMovies(query) {
         if (!query) return;
 
+        const language = "it-IT";
         const API_KEY = import.meta.env.VITE_API_KEY;
-        const URL = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`;
+        const URL = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=${language}&query=${query}`;
 
         try {
             const response = await fetch(URL);

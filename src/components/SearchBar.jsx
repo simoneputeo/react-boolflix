@@ -3,7 +3,15 @@ import { useMovies } from "../context/MoviesContext";
 
 function SearchBar() {
     const [query, setQuery] = useState("");
-    const { fetchMovies } = useMovies();
+    const { searchMovies } = useMovies();
+
+    function handleSearch() {
+        searchMovies(query);
+    }
+
+    function handleChange(event) {
+        setQuery(event.target.value);
+    }
 
     return (
         <div className="d-flex">
@@ -12,9 +20,9 @@ function SearchBar() {
                 className="form-control"
                 placeholder="Cerca un film..."
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={handleChange}
             />
-            <button className="btn btn-danger ms-2" onClick={() => fetchMovies(query)}>
+            <button className="btn btn-danger ms-2" onClick={handleSearch}>
                 Cerca
             </button>
         </div>
@@ -22,4 +30,3 @@ function SearchBar() {
 }
 
 export default SearchBar;
-
